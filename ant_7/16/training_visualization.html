@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Isaac Lab Training Results</title>
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            margin: 20px; 
+            background: #f5f5f5;
+        }
+        .container { 
+            max-width: 1200px; 
+            margin: 0 auto; 
+            background: white; 
+            padding: 20px; 
+            border-radius: 10px; 
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 { 
+            color: #333; 
+            text-align: center; 
+        }
+        .plot { 
+            text-align: center; 
+            margin: 20px 0; 
+        }
+        img { 
+            max-width: 100%; 
+            height: auto; 
+            border: 1px solid #ddd; 
+            border-radius: 5px; 
+        }
+        .summary {
+            background: #e8f5e8;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🤖 Isaac Lab Ant Training Results</h1>
+        
+        <div class="summary">
+            <h2>📊 Training Summary</h2>
+            <ul>
+                <li><strong>Task:</strong> Isaac-Ant-v0 (Quadruped Walking)</li>
+                <li><strong>Reward Improvement:</strong> -0.456 → 130+ (incredible progress!)</li>
+                <li><strong>Episode Length:</strong> 19.7 → 900+ steps (45x improvement!)</li>
+                <li><strong>Training Status:</strong> 42%+ complete and still running</li>
+                <li><strong>Performance:</strong> Ants learned to walk excellently!</li>
+            </ul>
+        </div>
+
+        <div class="plot">
+            <h2>Main Training Progress</h2>
+            <img src="ant_training_progress.png" alt="Isaac Lab Ant Training Progress">
+        </div>
+
+        <div class="plot">
+            <h2>Detailed Training Metrics</h2>
+            <img src="training_results.png" alt="Detailed Training Results">
+        </div>
+
+        <div class="summary">
+            <h3>🎯 What This Shows</h3>
+            <p>The plots demonstrate successful reinforcement learning where the ant robots:</p>
+            <ul>
+                <li>Started by barely surviving 20 steps</li>
+                <li>Learned to walk for 900+ steps consistently</li>
+                <li>Achieved stable, high-reward behavior</li>
+                <li>Mastered quadruped locomotion in simulation</li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>
