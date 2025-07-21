@@ -18,6 +18,21 @@
 .DS_Store
 **/*.egg-info/
 **/__pycache__/
+
+# Training Scripts and Logs (User-Created)
+logs/
+wandb/
+outputs/
+train_*.sh
+launch_*.sh
+simple_*.sh
+test_*.sh
+*_training.py
+*_8gpu*
+TRAINING_GUIDE.md
+gpu_metrics_explained.py
+memory_optimization_guide.py
+*.pid
 **/.pytest_cache/
 **/*.pyc
 **/*.pb
