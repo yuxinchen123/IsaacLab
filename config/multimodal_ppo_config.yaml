@@ -1,0 +1,100 @@
+# Isaac Factory PegInsert Multimodal PPO Configuration  
+# YAML configuration for training parameters
+
+# Environment settings
+environment:
+  task_name: 'Isaac-Factory-PegInsert-Direct-v0'
+  num_agents: 8
+  envs_per_agent: 256  # Conservative: 8 * 256 = 2048 environments
+  device: 'cuda:0'
+  headless: true
+  env_spacing: 2.0
+
+# Training parameters
+training:
+  max_iterations: 10000
+  steps_per_rollout: 24
+  save_model_freq: 1000
+  eval_freq: 2000
+
+# PPO Algorithm hyperparameters (RSL RL integration)
+ppo:
+  # Learning parameters
+  learning_rate: 1e-4
+  schedule: 'adaptive'
+  gamma: 0.99
+  lam: 0.95
+  
+  # Policy parameters
+  clip_param: 0.2
+  entropy_coef: 0.01
+  value_loss_coef: 1.0
+  use_clipped_value_loss: true
+  
+  # Training parameters
+  num_learning_epochs: 5
+  num_mini_batches: 4
+  desired_kl: 0.01
+  max_grad_norm: 1.0
+
+# Multimodal observation encoder
+encoder:
+  rgb:
+    shape: [3, 64, 64]
+    embedding_dim: 256
+  tactile:
+    shape: [6, 32, 32]  # Simulated tactile for fingertips
+    embedding_dim: 128
+  proprioception:
+    dim: 21  # Factory PegInsert observation space 
+    embedding_dim: 64
+  fusion:
+    hidden_dim: 512
+    output_dim: 256
+
+# Actor-Critic network architecture
+policy:
+  activation: 'elu'
+  actor_hidden_dims: [512, 256, 128]
+  critic_hidden_dims: [512, 256, 128] 
+  init_noise_std: 1.0
+
+# Logging and monitoring (WandB Switch)
+logging:
+  use_wandb: true  # Set to false for terminal logging
+  video_record_freq: 5000
+  video_length: 200
+  log_freq: 100
+
+# WandB configuration
+wandb:
+  project: 'isaac-factory-peginsert-multimodal'
+  entity: null  # Set to your WandB username/organization
+  run_name: 'multimodal_peginsert'
+  tags: ['isaac-factory', 'peginsert', 'multimodal', 'ppo', 'rsl-rl']
+  notes: 'Multi-agent multimodal PPO training with RGB, tactile, and proprioception for peg insertion'
+
+# GPU Utilization settings (TRUE PARALLEL)
+gpu:
+  device_ids: [0, 1, 2, 3, 4, 5, 6, 7]  # All 8 GPUs used in parallel
+  allocation: "1:1"  # 1 agent per GPU (no sharing)
+  parallel_execution: true
+  capacity_estimates:
+    conservative: 128   # 128 envs per GPU (safe)
+    moderate: 256      # 256 envs per GPU (balanced)  
+    aggressive: 512    # 512 envs per GPU (max)
+  memory_management: "independent"  # No root node bottlenecks
+
+# Video recording (individual agent environments)
+video:
+  enable: true
+  frequency_steps: 5000
+  length_steps: 200
+  fps: 30
+  format: 'mp4'
+
+# Model checkpointing
+checkpointing:
+  save_frequency: 1000
+  save_best: true
+  max_to_keep: 5

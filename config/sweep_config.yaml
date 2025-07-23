@@ -1,0 +1,113 @@
+# WandB Sweep Configuration for Isaac Factory PegInsert Multimodal PPO
+# Hyperparameter optimization using Bayesian optimization
+
+program: multimodal_ppo_training.py
+method: bayes
+metric:
+  goal: maximize
+  name: episode_reward
+early_terminate:
+  type: hyperband
+  min_iter: 1000
+  eta: 3
+
+parameters:
+  # PPO hyperparameters
+  learning_rate:
+    distribution: log_uniform_values
+    min: 1e-5
+    max: 1e-3
+  
+  clip_param:
+    distribution: uniform
+    min: 0.1
+    max: 0.3
+    
+  entropy_coef:
+    distribution: log_uniform_values
+    min: 1e-4
+    max: 1e-1
+    
+  value_loss_coef:
+    distribution: uniform
+    min: 0.5
+    max: 2.0
+    
+  gamma:
+    distribution: uniform
+    min: 0.98
+    max: 0.999
+    
+  lam:
+    distribution: uniform
+    min: 0.9
+    max: 0.99
+    
+  num_learning_epochs:
+    values: [3, 5, 8, 10]
+    
+  num_mini_batches:
+    values: [2, 4, 8, 16]
+    
+  desired_kl:
+    distribution: log_uniform_values
+    min: 1e-3
+    max: 1e-1
+    
+  max_grad_norm:
+    distribution: uniform
+    min: 0.5
+    max: 2.0
+
+  # Network architecture parameters
+  actor_hidden_dims:
+    values: 
+      - [512, 256, 128]
+      - [256, 256, 128] 
+      - [512, 512, 256]
+      - [1024, 512, 256]
+      
+  critic_hidden_dims:
+    values:
+      - [512, 256, 128]
+      - [256, 256, 128]
+      - [512, 512, 256] 
+      - [1024, 512, 256]
+      
+  init_noise_std:
+    distribution: uniform
+    min: 0.5
+    max: 2.0
+
+  # Multimodal encoder parameters
+  rgb_embedding_dim:
+    values: [128, 256, 512]
+    
+  tactile_embedding_dim:
+    values: [64, 128, 256]
+    
+  proprio_embedding_dim:
+    values: [32, 64, 128]
+    
+  fusion_hidden_dim:
+    values: [256, 512, 1024]
+    
+  fusion_output_dim:
+    values: [128, 256, 512]
+
+  # Training parameters  
+  steps_per_rollout:
+    values: [12, 24, 48, 96]
+
+# Fixed parameters (not swept)
+command:
+  - --config
+  - config/multimodal_ppo_config.yaml
+  - --use_wandb
+  - --agents
+  - 4  # Reduce agents for sweep to save compute
+  - --envs-per-agent
+  - 128
+  - --max-iter
+  - 5000  # Shorter training for sweep
+  - --headless
